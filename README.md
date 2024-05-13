@@ -24,10 +24,10 @@
     <h3>Back Office</h3>
       <li><u>database</u></li>
       <ul>
-        <li>Special</li>
+        <li>(ok)Special</li>
         <ul>
-          <li><i>Id: Serial</i></li>
-          <li><i>Name: Varchar</i></li>
+          <li><i>(ok)Id: Serial</i></li>
+          <li><i>(ok)Name: Varchar</i></li>
         </ul>
       </ul>
       <li><u>classes</u></li>
@@ -54,11 +54,11 @@
     <h3>Back Office</h3>
       <li><u>database</u></li>
       <ul>
-        <li>racers</li>
+        <li>(ok)racers</li>
           <ul>
-            <li><i>Id: Serial</i></li>
-            <li><i>Name: Varchar</i></li>
-            <li><i>Time: TimeStamp</i></li>
+            <li><i>(ok)Id: Serial</i></li>
+            <li><i>(ok)Name: Varchar</i></li>
+            <li><i>(ok)Time: TimeStamp</i></li>
           </ul>
       </ul>
       <li><u>classes</u></li>
