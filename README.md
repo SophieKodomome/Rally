@@ -3,7 +3,9 @@
 <p>A rally race simulator that data sort the result of a race</p>
 
 <h1>Techno &#x1F4BB;</h1>
-<p><strong>C++</strong></p>
+<li>Language: <strong>C++</strong></li>
+<li>GUI: Qt</li>
+<li>Database: Postgre</li>
 
 <h1>Features &#x1F680;</h1>
   <li>A form to write the specials(type of race) & number of racers</li>
