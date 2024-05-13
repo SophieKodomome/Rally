@@ -1,0 +1,1 @@
+g++ -o Rally Run.cpp -I "C:\Program Files\PostgreSQL\15\include" -L "C:\Program Files\PostgreSQL\15\lib" -lpq
