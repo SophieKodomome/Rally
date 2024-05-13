@@ -1,4 +1,4 @@
-<h1>Rally &#x1F697;</h1>
+<h1>Rally &#x1F697; &#x1F525; &#x1F525; &#x1F525;</h1>
 <h1>Contexte &#x1F9E0;</h1>
 <p>A rally race simulator that data sort the result of a race</p>
 
