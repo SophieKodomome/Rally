@@ -14,15 +14,15 @@
 
 <h1>To do list &#x1F4CB;</h1>
   <h2> &#x1F4C4; Page Form_1(index)</h2>
-    <h3>Front Office</h3>
-      <li>Make a form</li>
+    <h3>(ok)Front Office</h3>
+      <li>(ok)Make a form</li>
         <ul>
-          <li>Select Special</li>
-          <li>Input number of racers(shouldn't be higher than the number of racer in the database</li>
-          <li>Button Confirm</li>
+          <li>(ok)Select Special</li>
+          <li>(ok)Input number of racers(shouldn't be higher than the number of racer in the database</li>
+          <li>(ok)Button Confirm</li>
         </ul>
-    <h3>Back Office</h3>
-      <li><u>database</u></li>
+    <h3>(ok)Back Office</h3>
+      <li><u>(ok)database</u></li>
       <ul>
         <li>(ok)Special</li>
         <ul>
@@ -30,19 +30,19 @@
           <li><i>(ok)Name: Varchar</i></li>
         </ul>
       </ul>
-      <li><u>classes</u></li>
+      <li><u>(ok)classes</u></li>
       <ul>
-        <li>Special</li>
+        <li>(ok)Special</li>
         <ul>
-          <li><i>Id: Int</i></li>
-          <li><i>Name: String</i></li>
+          <li><i>(ok)Id: Int</i></li>
+          <li><i>(ok)Name: String</i></li>
         </ul>
-        <li>PosgreConnect</li>
+        <li>(ok)PosgreConnect</li>
       </ul>
-    <h3>Functions</h3>
-      <li>GetConnection()</li>
-      <li>GetListSpecial()</li>
-      <li>Send datas(Special,Number of Racer) from form to Page Form_2</li>
+    <h3>(ok)Functions</h3>
+      <li>(ok)GetConnection()</li>
+      <li>(ok)GetListSpecial()</li>
+      <li>(ok)Send datas(Special,Number of Racer) from form to Page Form_2</li>
   <h2> &#x1F4C4; Page Form_2</h2>
     <h3>Front Office</h3>
       <li>Make a Form</li>
