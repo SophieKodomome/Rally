@@ -235,7 +235,7 @@ public:
 
 HWND hwndSecondWindow = NULL;
 
-struct WindowData {
+struct RaceStruct {
     std::string selectedSpecial;
     std::string selectedNumberRacer;
     std::vector<Racer> racers;
@@ -244,19 +244,48 @@ struct WindowData {
 // In the second window's window procedure
 LRESULT CALLBACK SecondWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    std::string selectedRacer;
     switch (msg)
     {
     case WM_CREATE:
     {
+        
+        static HWND comboBoxRacers;
         // Retrieve the data passed from ShowSecondWindow
-        WindowData *pData = reinterpret_cast<WindowData*>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams);
-        if (pData != nullptr)
+        RaceStruct *raceStruct = reinterpret_cast<RaceStruct*>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams);
+
+        int comboBoxRacersHeight = 20;
+        comboBoxRacersHeight = comboBoxRacersHeight * (raceStruct->racers.size());
+
+        if (raceStruct != nullptr)
         {
-            // Use pData->selectedSpecial, pData->selectedNumberRacer, and pData->racers here
-            std::string labelSpecial = "Type de Speciale: " + pData->selectedSpecial;
+            // Use raceStruct->selectedSpecial, raceStruct->selectedNumberRacer, and raceStruct->racers here
+            std::string labelSpecial = "Type de Speciale: " + raceStruct->selectedSpecial;
             CreateWindow("STATIC", labelSpecial.c_str(), WS_VISIBLE | WS_CHILD, 0, 0, 200, 20, hwnd, NULL, NULL, NULL);
-            std::string labelNumberRacer = "Nombre de concurent: " + pData->selectedNumberRacer;
+            std::string labelNumberRacer = "Nombre de concurent: " + raceStruct->selectedNumberRacer;
             CreateWindow("STATIC", labelNumberRacer.c_str(), WS_VISIBLE | WS_CHILD, 0, 20, 200, 20, hwnd, NULL, NULL, NULL);
+
+            CreateWindow("STATIC","Coureur",WS_VISIBLE | WS_CHILD, 50, 60, 100, comboBoxRacersHeight, hwnd, NULL, NULL, NULL);
+            comboBoxRacers = CreateWindow("COMBOBOX", "", WS_VISIBLE | WS_CHILD | WS_BORDER, 150, 60, 200, comboBoxRacersHeight, hwnd, NULL, NULL, NULL);
+
+            for (const auto &racer :raceStruct->racers )
+            {
+                SendMessage(comboBoxRacers, CB_ADDSTRING, 0, (LPARAM)racer.getName().c_str());
+            }
+            int inputHeight=80+comboBoxRacersHeight;
+            CreateWindow("STATIC","Minute",WS_VISIBLE | WS_CHILD, 50, inputHeight, 100, 20, hwnd, NULL, NULL, NULL);
+            CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_BORDER, 150, inputHeight, 200, 20, hwnd, NULL, NULL, NULL);
+
+            inputHeight=inputHeight+20;
+            CreateWindow("STATIC","Sec",WS_VISIBLE | WS_CHILD, 50, inputHeight, 100, 20, hwnd, NULL, NULL, NULL);
+            CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_BORDER, 150, inputHeight, 200, 20, hwnd, NULL, NULL, NULL);    
+
+            inputHeight=inputHeight+20;
+            CreateWindow("STATIC","Millisec",WS_VISIBLE | WS_CHILD, 50, inputHeight, 100, 20, hwnd, NULL, NULL, NULL);
+            CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_BORDER, 150, inputHeight, 200, 20, hwnd, NULL, NULL, NULL);
+
+                    CreateWindow("BUTTON", "Suivant", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 200, 400, 100, 40, hwnd, (HMENU)IDC_NEXT_BUTTON, NULL, NULL);
+               
         }
         break;
     }
@@ -275,14 +304,14 @@ void ShowSecondWindow(HWND hwndParent, const std::string &selectedSpecial, const
     wc.lpszClassName = "SecondWindowClass";
     RegisterClass(&wc);
 
-    WindowData *pData = new WindowData;
-    pData->selectedSpecial = selectedSpecial;
-    pData->selectedNumberRacer = selectedNumberRacer;
-    pData->racers = racers;
+    RaceStruct *raceStruct = new RaceStruct;
+    raceStruct->selectedSpecial = selectedSpecial;
+    raceStruct->selectedNumberRacer = selectedNumberRacer;
+    raceStruct->racers = racers;
 
     // Create the second window
     std::string windowText = "Rally Noble (form_2)";
-    hwndSecondWindow = CreateWindow("SecondWindowClass", windowText.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 400, 600, hwndParent, NULL, GetModuleHandle(NULL), pData);
+    hwndSecondWindow = CreateWindow("SecondWindowClass", windowText.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 400, 600, hwndParent, NULL, GetModuleHandle(NULL), raceStruct);
 
     // Show and update the second window
     ShowWindow(hwndSecondWindow, SW_SHOW);
@@ -292,7 +321,7 @@ void ShowSecondWindow(HWND hwndParent, const std::string &selectedSpecial, const
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, std::vector<Speciale> specials, std::vector<Racer> racers)
 {
     std::string selectedSpecial;
-    std::string selectedRacer;
+    std::string selectedNumberRacer;
     static HWND comboBoxSpecial;
     static HWND comboBoxRacer;
 
@@ -351,10 +380,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, std:
                 TCHAR itemBuffer[256];
                 SendMessage(comboBoxRacer, CB_GETLBTEXT, indexRacer, reinterpret_cast<LPARAM>(itemBuffer));
                 itemBuffer[255] = '\0'; // Ensure null-termination
-                selectedRacer = itemBuffer;
+                selectedNumberRacer = itemBuffer;
             }
             // Show the second window with the captured data
-            ShowSecondWindow(hwnd, selectedSpecial, selectedRacer,racers);
+            ShowSecondWindow(hwnd, selectedSpecial, selectedNumberRacer,racers);
             break;
         }
         break;
