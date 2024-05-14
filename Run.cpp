@@ -235,27 +235,38 @@ public:
 
 HWND hwndSecondWindow = NULL;
 
+struct WindowData {
+    std::string selectedSpecial;
+    std::string selectedNumberRacer;
+    std::vector<Racer> racers;
+};
+
 // In the second window's window procedure
 LRESULT CALLBACK SecondWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
     {
-    case WM_SELECTED_OPTION:
+    case WM_CREATE:
     {
-        TCHAR *selectedOption = reinterpret_cast<TCHAR *>(lParam);
-        // Do something with the selected option
-        MessageBox(hwnd, selectedOption, "Selected Option", MB_OK | MB_ICONINFORMATION);
+        // Retrieve the data passed from ShowSecondWindow
+        WindowData *pData = reinterpret_cast<WindowData*>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams);
+        if (pData != nullptr)
+        {
+            // Use pData->selectedSpecial, pData->selectedNumberRacer, and pData->racers here
+            std::string labelSpecial = "Type de Speciale: " + pData->selectedSpecial;
+            CreateWindow("STATIC", labelSpecial.c_str(), WS_VISIBLE | WS_CHILD, 0, 0, 200, 20, hwnd, NULL, NULL, NULL);
+            std::string labelNumberRacer = "Nombre de concurent: " + pData->selectedNumberRacer;
+            CreateWindow("STATIC", labelNumberRacer.c_str(), WS_VISIBLE | WS_CHILD, 0, 20, 200, 20, hwnd, NULL, NULL, NULL);
+        }
         break;
     }
-    // Handle other messages as needed
-    default:
-        return DefWindowProc(hwnd, msg, wParam, lParam);
+    // Handle other messages
     }
-    return 0;
+    return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
 // Function to create and show the second window
-void ShowSecondWindow(HWND hwndParent, const std::string &selectedSpecial, const std::string &selectedNumberRacer)
+void ShowSecondWindow(HWND hwndParent, const std::string &selectedSpecial, const std::string &selectedNumberRacer,const std::vector<Racer> &racers)
 {
     // Register window class for the second window
     WNDCLASS wc = {0};
@@ -264,9 +275,14 @@ void ShowSecondWindow(HWND hwndParent, const std::string &selectedSpecial, const
     wc.lpszClassName = "SecondWindowClass";
     RegisterClass(&wc);
 
+    WindowData *pData = new WindowData;
+    pData->selectedSpecial = selectedSpecial;
+    pData->selectedNumberRacer = selectedNumberRacer;
+    pData->racers = racers;
+
     // Create the second window
-    std::string windowText = "Selected Special: " + selectedSpecial + " Selected number Racer: " + selectedNumberRacer;
-    hwndSecondWindow = CreateWindow("SecondWindowClass", windowText.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, hwndParent, NULL, GetModuleHandle(NULL), NULL);
+    std::string windowText = "Rally Noble (form_2)";
+    hwndSecondWindow = CreateWindow("SecondWindowClass", windowText.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 400, 600, hwndParent, NULL, GetModuleHandle(NULL), pData);
 
     // Show and update the second window
     ShowWindow(hwndSecondWindow, SW_SHOW);
@@ -289,7 +305,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, std:
         comboBoxSpecialeHeight = comboBoxSpecialeHeight * (specials.size() + 1);
 
         int comboBoxRacerHeight = 20;
-        comboBoxRacerHeight = comboBoxRacerHeight * (racers.size() + 1);
+        comboBoxRacerHeight = comboBoxRacerHeight * (racers.size());
 
         std::string racerCount;
 
@@ -338,7 +354,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, std:
                 selectedRacer = itemBuffer;
             }
             // Show the second window with the captured data
-            ShowSecondWindow(hwnd, selectedSpecial, selectedRacer);
+            ShowSecondWindow(hwnd, selectedSpecial, selectedRacer,racers);
             break;
         }
         break;
